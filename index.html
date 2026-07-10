@@ -1,0 +1,263 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; connect-src 'none'; img-src 'self' data:; base-uri 'none'; form-action 'none'; frame-ancestors 'none'; object-src 'none'">
+  <title>wattspend — Appliance Electricity Cost Calculator</title>
+  <meta name="description" content="Find out what every appliance costs to run — per month and per year — on your own electricity rate. See the biggest money-drainers first. Private, offline, no sign-up.">
+  <meta name="color-scheme" content="dark">
+  <link rel="canonical" href="https://sreenivas-sadhu-prabhakara.github.io/wattspend/">
+  <meta name="robots" content="index, follow, max-image-preview:large">
+  <meta name="author" content="Sreenivas Sadhu Prabhakara">
+  <meta name="keywords" content="appliance electricity cost calculator, how much does it cost to run an appliance, kWh cost calculator, home energy cost estimator, what uses the most electricity, electricity bill calculator, energy saving">
+  <meta name="theme-color" content="#14161C" media="(prefers-color-scheme: dark)">
+  <meta name="theme-color" content="#1B1E27" media="(prefers-color-scheme: light)">
+
+  <!-- Open Graph -->
+  <meta property="og:type" content="website">
+  <meta property="og:site_name" content="wattspend">
+  <meta property="og:title" content="wattspend — Appliance Electricity Cost Calculator">
+  <meta property="og:description" content="Find out what every appliance costs to run — per month and per year — on your own electricity rate. See the biggest money-drainers first. Private, offline, no sign-up.">
+  <meta property="og:url" content="https://sreenivas-sadhu-prabhakara.github.io/wattspend/">
+  <meta property="og:locale" content="en_US">
+  <meta property="og:image" content="https://sreenivas-sadhu-prabhakara.github.io/wattspend/og-image.png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta property="og:image:alt" content="wattspend — see what each appliance costs to run">
+
+  <!-- Twitter -->
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="wattspend — Appliance Electricity Cost Calculator">
+  <meta name="twitter:description" content="Find out what every appliance costs to run — per month and per year — on your own electricity rate. See the biggest money-drainers first. Private, offline, no sign-up.">
+  <meta name="twitter:image" content="https://sreenivas-sadhu-prabhakara.github.io/wattspend/og-image.png">
+  <meta name="twitter:image:alt" content="wattspend — see what each appliance costs to run">
+
+  <link rel="stylesheet" href="styles.css">
+  <link rel="icon" href="favicon.svg" type="image/svg+xml">
+  <link rel="apple-touch-icon" href="apple-touch-icon.png">
+  <link rel="manifest" href="manifest.webmanifest">
+
+  <!-- Structured data (data block; not affected by script-src) -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "WebApplication",
+    "name": "wattspend",
+    "description": "An appliance electricity cost calculator that shows what each appliance costs to run — per month and per year — on your own rate, ranked by cost so you know what to fix first. Runs fully offline in your browser.",
+    "url": "https://sreenivas-sadhu-prabhakara.github.io/wattspend/",
+    "applicationCategory": "UtilitiesApplication",
+    "operatingSystem": "Any (modern web browser)",
+    "browserRequirements": "Requires a modern web browser with JavaScript enabled.",
+    "isAccessibleForFree": true,
+    "offers": { "@type": "Offer", "price": "0", "priceCurrency": "USD" },
+    "license": "https://opensource.org/licenses/MIT",
+    "author": { "@type": "Person", "name": "Sreenivas Sadhu Prabhakara" },
+    "softwareVersion": "0.1.0",
+    "featureList": [
+      "Cost per appliance, per month and per year, on your own rate",
+      "Appliances ranked by cost so you see the biggest drainers first",
+      "Editable watts, hours per day, and days per week",
+      "Currency presets for six regions you can override",
+      "Transparent, visible kWh and cost formula",
+      "Printable ranked cost summary",
+      "Runs 100% offline in your browser"
+    ]
+  }
+  </script>
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    "mainEntity": [
+      {
+        "@type": "Question",
+        "name": "How do I calculate what an appliance costs to run?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Multiply the appliance's power in watts by the hours you run it per day, then divide by 1000 to get kilowatt-hours (kWh) per day. Multiply by the days you use it and by your electricity rate per kWh to get the cost. wattspend does this for every appliance and ranks them by cost."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "Which home appliances use the most electricity?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Usually anything that heats or cools: air conditioners, electric water heaters, space heaters, clothes dryers, and always-on appliances like the fridge and freezer. Because they run long hours or draw high power, they dominate most electricity bills — which is why wattspend ranks by cost."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "Does wattspend send my data anywhere?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "No. wattspend runs entirely in your browser and a strict Content-Security-Policy blocks all network requests, so it cannot send data anywhere even if it tried. Your appliances and rate are saved only in your own browser's local storage."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "Are the appliance wattages and costs exact?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "They are realistic estimates, not a metered reading. Defaults use typical effective wattages, and appliances that cycle on and off (like fridges) use an effective figure so the daily kWh is believable. Edit the watts, hours, and rate to match your own appliances and bill for a closer number."
+        }
+      }
+    ]
+  }
+  </script>
+</head>
+<body>
+  <a class="skip-link" href="#app">Skip to my appliances</a>
+
+  <!-- ============ HERO ============ -->
+  <header class="hero" id="top">
+    <div class="hero__wave" aria-hidden="true">
+      <svg class="wave" viewBox="0 0 1440 320" preserveAspectRatio="xMidYMid slice" role="presentation">
+        <path class="wave__line wave__line--1" d="" />
+        <path class="wave__line wave__line--2" d="" />
+      </svg>
+    </div>
+
+    <div class="hero__inner">
+      <div class="brand">
+        <svg class="brand__mark" viewBox="0 0 32 32" aria-hidden="true">
+          <rect x="1"  y="17" width="5" height="10" rx="1.5"/>
+          <rect x="9"  y="12" width="5" height="15" rx="1.5"/>
+          <rect x="17" y="8"  width="5" height="19" rx="1.5" class="brand__mark--cost"/>
+          <rect x="25" y="4"  width="5" height="23" rx="1.5" class="brand__mark--cost"/>
+        </svg>
+        <span class="brand__word">wattspend</span>
+      </div>
+
+      <p class="eyebrow">Appliance electricity cost &middot; your rate &middot; offline</p>
+      <h1 class="hero__title">See what each appliance is<br><span class="hero__accent">actually costing you.</span></h1>
+      <p class="hero__lede">
+        Put in your electricity rate, and wattspend works out what every appliance costs to run &mdash;
+        per month and per year &mdash; then ranks them so the biggest money-drainers come first.
+        No accounts, no network. The math is right here, so you can trust it and adjust it.
+      </p>
+
+      <!-- ============ RATE SETUP ============ -->
+      <div class="rate">
+        <fieldset class="panel">
+          <legend class="panel__legend">Your electricity rate</legend>
+          <div class="rate__row">
+            <div class="rate__field">
+              <label for="currency">Currency &amp; region</label>
+              <div class="select-wrap">
+                <select id="currency" aria-describedby="rateHint"></select>
+              </div>
+            </div>
+            <div class="rate__field rate__field--price">
+              <label for="rate">Price per kWh</label>
+              <div class="rate__input">
+                <span class="rate__sym" id="rateSym" aria-hidden="true">$</span>
+                <input type="number" id="rate" min="0" step="0.01" inputmode="decimal" value="0.17">
+                <span class="rate__unit">/ kWh</span>
+              </div>
+            </div>
+          </div>
+          <p class="panel__hint" id="rateHint">
+            Presets are <strong>indicative</strong> &mdash; set your own rate from your latest bill for an accurate result.
+          </p>
+        </fieldset>
+      </div>
+    </div>
+  </header>
+
+  <main id="app">
+    <!-- ============ TOTALS BAR (sticky) ============ -->
+    <section class="totals" aria-labelledby="totalsHeading">
+      <div class="totals__inner">
+        <h2 class="totals__heading" id="totalsHeading">Estimated bill from your appliances</h2>
+        <div class="totals__figures">
+          <div class="figure">
+            <span class="figure__val" id="totalMonth">&mdash;</span>
+            <span class="figure__lab">per month</span>
+          </div>
+          <div class="figure figure--year">
+            <span class="figure__val" id="totalYear">&mdash;</span>
+            <span class="figure__lab">per year</span>
+          </div>
+          <div class="figure figure--kwh">
+            <span class="figure__val" id="totalKwh">&mdash;</span>
+            <span class="figure__lab">kWh / month</span>
+          </div>
+        </div>
+        <div class="totals__actions">
+          <button type="button" class="btn btn--ghost" id="printBtn">Print summary</button>
+          <button type="button" class="btn btn--ghost" id="resetBtn">Reset</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============ BIGGEST WINS ============ -->
+    <section class="wins" id="wins" aria-labelledby="winsHeading" hidden>
+      <h2 class="wins__heading" id="winsHeading">Where your money goes</h2>
+      <div class="wins__grid" id="winsGrid"></div>
+    </section>
+
+    <!-- ============ RANKED APPLIANCES ============ -->
+    <section class="ranking" aria-labelledby="rankHeading">
+      <div class="ranking__head">
+        <h2 class="ranking__heading" id="rankHeading">Your appliances, most expensive first</h2>
+        <p class="ranking__note">Edit watts, hours a day, and days a week. Everything recomputes as you type.</p>
+      </div>
+
+      <ol class="applist" id="applist" aria-label="Appliances ranked by cost"></ol>
+
+      <p class="applist__empty" id="emptyState" hidden>
+        No appliances yet. Add some from the library below to see what they cost.
+      </p>
+    </section>
+
+    <!-- ============ LIBRARY (add appliances) ============ -->
+    <section class="library" aria-labelledby="libHeading">
+      <div class="library__head">
+        <h2 class="library__heading" id="libHeading">Add an appliance</h2>
+        <p class="library__note">Realistic defaults for effective power and typical use &mdash; tweak them to match yours.</p>
+      </div>
+      <div class="library__grid" id="library"></div>
+    </section>
+
+    <!-- ============ FORMULA / TRUST ============ -->
+    <section class="method" aria-labelledby="methodHeading">
+      <h2 class="method__heading" id="methodHeading">How the numbers are worked out</h2>
+      <div class="method__grid">
+        <div class="formula">
+          <p class="formula__line"><span class="formula__lhs">kWh / day</span> = watts &times; hours&#8202;per&#8202;day &divide; 1000</p>
+          <p class="formula__line"><span class="formula__lhs">kWh / month</span> = kWh&#8202;per&#8202;day &times; (days&#8202;per&#8202;week &divide; 7) &times; 30.44</p>
+          <p class="formula__line"><span class="formula__lhs">cost</span> = kWh &times; your&#8202;rate&#8202;per&#8202;kWh</p>
+        </div>
+        <p class="method__prose">
+          30.44 is the average number of days in a month, so a 7-day-a-week appliance is counted for a
+          full month. For always-on or cycling appliances like a fridge or router, the defaults use an
+          <em>effective</em> wattage &mdash; a fridge doesn't pull its full compressor rating around the
+          clock, so counting it at that would badly overstate the cost. Change any number to match your
+          own appliance, and the ranking and totals update instantly.
+        </p>
+      </div>
+    </section>
+  </main>
+
+  <!-- ============ FOOTER ============ -->
+  <footer class="foot">
+    <div class="foot__inner">
+      <p class="foot__disclaimer">
+        <strong>Estimates only &mdash; not a metered reading or professional energy audit.</strong>
+        Figures come from your inputs and typical wattages, and are meant to help you compare and
+        prioritise, not to predict your exact bill. For precise numbers, read your meter or ask a
+        qualified electrician or energy assessor.
+      </p>
+      <p class="foot__meta">
+        <span>Works 100% offline</span><span class="foot__dot">&middot;</span>
+        <span>No network, no accounts</span><span class="foot__dot">&middot;</span>
+        <span>MIT&nbsp;License</span><span class="foot__dot">&middot;</span>
+        <span>&copy; 2026 Sreenivas&nbsp;Sadhu&nbsp;Prabhakara</span>
+      </p>
+    </div>
+  </footer>
+
+  <script src="app.js" defer></script>
+</body>
+</html>

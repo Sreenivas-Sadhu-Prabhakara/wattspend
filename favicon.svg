@@ -1,0 +1,7 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" role="img" aria-label="wattspend">
+  <rect width="32" height="32" rx="7" fill="#14161C"/>
+  <rect x="6"  y="18" width="4" height="8"  rx="1.5" fill="#5BC4B8"/>
+  <rect x="12" y="13" width="4" height="13" rx="1.5" fill="#5BC4B8"/>
+  <rect x="18" y="9"  width="4" height="17" rx="1.5" fill="#F0A65C"/>
+  <rect x="24" y="6"  width="4" height="20" rx="1.5" fill="#F0A65C"/>
+</svg>
