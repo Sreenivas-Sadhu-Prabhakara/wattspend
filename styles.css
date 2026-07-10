@@ -672,3 +672,124 @@ select:focus-visible {
 
   @page { margin: 14mm; }
 }
+
+/* ============================================================
+   GUIDED FLOW — stepper, steps, picker, result, share
+   (added for the rate → appliances → cost + share journey)
+   ============================================================ */
+
+/* primary call-to-action — filled copper, dark ink text */
+.btn--primary {
+  background: var(--cost);
+  color: #2a1802;
+  border-color: var(--cost);
+}
+.btn--primary:hover { background: #f4b471; border-color: #f4b471; }
+.btn--next { font-size: 1rem; padding: 13px 22px; }
+
+/* ---------- stepper (in hero) ---------- */
+.stepper {
+  list-style: none; margin: clamp(22px, 2.8vw, 30px) 0 0; padding: 0;
+  display: flex; align-items: center; gap: 8px; flex-wrap: wrap;
+}
+.stepper__sep { flex: 0 1 40px; height: 1px; background: var(--line2); }
+.stepper__btn {
+  display: inline-flex; align-items: center; gap: 9px;
+  background: transparent; border: 1px solid var(--line); border-radius: 999px;
+  padding: 7px 15px 7px 8px; cursor: pointer;
+  color: var(--mute); font-family: var(--sans); font-weight: 600; font-size: 0.86rem;
+  transition: border-color 0.15s var(--ease), color 0.15s var(--ease), background 0.15s var(--ease);
+}
+.stepper__btn:hover { border-color: var(--line2); color: var(--paper); }
+.stepper__n {
+  flex: none; width: 24px; height: 24px; border-radius: 50%;
+  display: grid; place-items: center;
+  background: var(--well); border: 1px solid var(--line); color: var(--mute);
+  font-family: var(--mono); font-weight: 700; font-size: 0.82rem;
+}
+.stepper__item.is-active .stepper__btn { border-color: var(--cost); color: var(--paper); background: var(--cost-dim); }
+.stepper__item.is-active .stepper__n { background: var(--cost); border-color: var(--cost); color: #2a1802; }
+.stepper__item.is-done .stepper__btn { color: var(--paper); }
+.stepper__item.is-done .stepper__n { background: var(--save); border-color: var(--save); color: #04201d; }
+.stepper__item[aria-disabled="true"] .stepper__btn { opacity: 0.5; cursor: not-allowed; }
+.stepper__item[aria-disabled="true"] .stepper__btn:hover { border-color: var(--line); color: var(--mute); }
+
+/* ---------- step panels ---------- */
+.step:focus { outline: none; }
+.step__inner { max-width: var(--wrap); margin: 0 auto; padding: clamp(26px, 4vw, 44px) clamp(20px, 5vw, 44px); }
+.step__kicker { font-size: 0.72rem; text-transform: uppercase; letter-spacing: 0.18em; color: var(--dim); font-weight: 700; }
+.step__title { font-size: clamp(1.4rem, 3vw, 2rem); letter-spacing: -0.03em; margin-top: 6px; }
+.step__sub { margin-top: 10px; color: var(--mute); max-width: 60ch; font-size: clamp(0.95rem, 1.2vw, 1.05rem); }
+.step .panel { margin-top: 22px; }
+.step__nav {
+  display: flex; align-items: center; justify-content: space-between; gap: 14px;
+  margin-top: 24px; flex-wrap: wrap;
+}
+
+/* ---------- Step 2: appliance picker ---------- */
+.picker {
+  display: grid; grid-template-columns: repeat(auto-fill, minmax(248px, 1fr));
+  gap: 10px; margin-top: 22px;
+}
+.pick {
+  border: 1px solid var(--line); border-radius: var(--radius-sm);
+  background: var(--panel); overflow: hidden;
+  transition: border-color 0.14s var(--ease), background 0.14s var(--ease);
+}
+.pick:hover { border-color: var(--line2); }
+.pick.is-on { border-color: var(--save); background: var(--panel2); }
+.pick__main { display: flex; align-items: center; gap: 11px; padding: 12px 13px; cursor: pointer; }
+.pick__check { flex: none; width: 20px; height: 20px; accent-color: var(--save); cursor: pointer; }
+.pick__body { min-width: 0; }
+.pick__name { display: block; font-size: 0.92rem; font-weight: 600; color: var(--paper); }
+.pick__spec { display: block; font-family: var(--mono); font-variant-numeric: tabular-nums; font-size: 0.72rem; color: var(--mute); margin-top: 1px; }
+.pick__qty { display: flex; align-items: center; gap: 10px; padding: 0 13px 12px 44px; }
+.pick__qty[hidden] { display: none; }
+.pick__qlab { font-size: 0.68rem; color: var(--dim); text-transform: uppercase; letter-spacing: 0.06em; font-weight: 700; }
+.qty { display: inline-flex; align-items: center; border: 1px solid var(--line); border-radius: 8px; background: var(--well); overflow: hidden; }
+.qty__btn { width: 30px; height: 30px; display: grid; place-items: center; background: transparent; border: none; color: var(--save); font-family: var(--mono); font-size: 1.15rem; font-weight: 700; line-height: 1; cursor: pointer; }
+.qty__btn:hover { background: var(--save-dim); }
+.qty__val { width: 3ch; text-align: center; font-family: var(--mono); font-variant-numeric: tabular-nums; font-weight: 600; font-size: 0.95rem; color: var(--paper); background: transparent; border: none; outline: none; padding: 6px 0; -moz-appearance: textfield; }
+.qty__val::-webkit-outer-spin-button, .qty__val::-webkit-inner-spin-button { -webkit-appearance: none; margin: 0; }
+.pick-count { font-size: 0.85rem; color: var(--mute); font-weight: 600; }
+
+/* ---------- Step 3: result header ---------- */
+.result__head {
+  max-width: var(--wrap); margin: 0 auto;
+  padding: clamp(24px, 3.5vw, 36px) clamp(20px, 5vw, 44px) 0;
+  display: flex; align-items: flex-end; justify-content: space-between; gap: 14px; flex-wrap: wrap;
+}
+.result__nav { display: flex; gap: 10px; flex-wrap: wrap; }
+.totals__rate { font-family: var(--mono); font-variant-numeric: tabular-nums; color: var(--dim); font-weight: 600; text-transform: none; letter-spacing: 0; margin-left: 4px; }
+.appliance__mult { font-family: var(--mono); font-variant-numeric: tabular-nums; font-size: 0.78rem; font-weight: 700; color: var(--save); }
+
+/* empty-state inline action */
+.linkbtn { background: none; border: none; color: var(--save); font: inherit; font-weight: 700; cursor: pointer; text-decoration: underline; text-underline-offset: 2px; padding: 0; }
+
+/* ---------- share toast ---------- */
+.toast {
+  position: fixed; left: 50%; bottom: 26px; transform: translateX(-50%) translateY(8px);
+  background: var(--panel2); color: var(--paper);
+  border: 1px solid var(--line2); border-radius: 12px;
+  padding: 12px 18px; font-size: 0.9rem; font-weight: 600;
+  box-shadow: var(--shadow); z-index: 80;
+  max-width: calc(100vw - 32px);
+  opacity: 0; pointer-events: none;
+  transition: opacity 0.2s var(--ease), transform 0.2s var(--ease);
+}
+.toast.is-show { opacity: 1; transform: translateX(-50%) translateY(0); }
+
+@media (max-width: 560px) {
+  .step__nav { gap: 10px; }
+  .step__nav .btn--next { flex: 1 1 100%; order: 3; }
+  .pick-count { order: 2; }
+}
+
+/* print: hide the journey chrome, keep the cost sheet */
+@media print {
+  .stepper, .step__nav, .picker, .result__nav, .toast,
+  #step1, #step2, .step__kicker, .step__sub { display: none !important; }
+  .result__head { padding: 0 0 8px; }
+  .step__title { color: #000; }
+  .totals__rate { color: #000 !important; }
+}

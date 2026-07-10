@@ -61,6 +61,7 @@
       "Currency presets for six regions you can override",
       "Transparent, visible kWh and cost formula",
       "Printable ranked cost summary",
+      "Shareable result link that encodes your setup, plus native share",
       "Runs 100% offline in your browser"
     ]
   }
@@ -101,6 +102,14 @@
           "@type": "Answer",
           "text": "They are realistic estimates, not a metered reading. Defaults use typical effective wattages, and appliances that cycle on and off (like fridges) use an effective figure so the daily kWh is believable. Edit the watts, hours, and rate to match your own appliances and bill for a closer number."
         }
+      },
+      {
+        "@type": "Question",
+        "name": "Can I share my electricity cost estimate?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Yes. wattspend builds a link that encodes your rate and the appliances you picked, so anyone who opens it sees the same breakdown. On a phone you can also use the native share sheet. Nothing is uploaded to a server — the details travel inside the link itself."
+        }
       }
     ]
   }
@@ -132,13 +141,28 @@
       <p class="eyebrow">Appliance electricity cost &middot; your rate &middot; offline</p>
       <h1 class="hero__title">See what each appliance is<br><span class="hero__accent">actually costing you.</span></h1>
       <p class="hero__lede">
-        Put in your electricity rate, and wattspend works out what every appliance costs to run &mdash;
-        per month and per year &mdash; then ranks them so the biggest money-drainers come first.
-        No accounts, no network. The math is right here, so you can trust it and adjust it.
+        Three quick steps: set your electricity rate, pick the appliances you use, then see what each one
+        costs &mdash; ranked biggest first. No accounts, no network, and you can share the result as a link.
       </p>
 
-      <!-- ============ RATE SETUP ============ -->
-      <div class="rate">
+      <ol class="stepper" id="stepper" aria-label="Progress">
+        <li class="stepper__item"><button type="button" class="stepper__btn" data-goto="1"><span class="stepper__n">1</span><span class="stepper__t">Your rate</span></button></li>
+        <li class="stepper__sep" aria-hidden="true"></li>
+        <li class="stepper__item"><button type="button" class="stepper__btn" data-goto="2"><span class="stepper__n">2</span><span class="stepper__t">Appliances</span></button></li>
+        <li class="stepper__sep" aria-hidden="true"></li>
+        <li class="stepper__item"><button type="button" class="stepper__btn" data-goto="3"><span class="stepper__n">3</span><span class="stepper__t">What it costs</span></button></li>
+      </ol>
+    </div>
+  </header>
+
+  <main id="app">
+    <!-- ============ STEP 1 — YOUR RATE ============ -->
+    <section class="step" id="step1" aria-labelledby="s1h" tabindex="-1">
+      <div class="step__inner">
+        <p class="step__kicker">Step 1 of 3</p>
+        <h2 class="step__title" id="s1h">What do you pay for electricity?</h2>
+        <p class="step__sub">Pick a region to start from a typical rate, then set your own from a recent bill for the most accurate result.</p>
+
         <fieldset class="panel">
           <legend class="panel__legend">Your electricity rate</legend>
           <div class="rate__row">
@@ -157,86 +181,104 @@
               </div>
             </div>
           </div>
-          <p class="panel__hint" id="rateHint">
-            Presets are <strong>indicative</strong> &mdash; set your own rate from your latest bill for an accurate result.
-          </p>
+          <p class="panel__hint" id="rateHint">Presets are <strong>indicative</strong> &mdash; set your own rate from your latest bill for an accurate result.</p>
         </fieldset>
-      </div>
-    </div>
-  </header>
 
-  <main id="app">
-    <!-- ============ TOTALS BAR (sticky) ============ -->
-    <section class="totals" aria-labelledby="totalsHeading">
-      <div class="totals__inner">
-        <h2 class="totals__heading" id="totalsHeading">Estimated bill from your appliances</h2>
-        <div class="totals__figures">
-          <div class="figure">
-            <span class="figure__val" id="totalMonth">&mdash;</span>
-            <span class="figure__lab">per month</span>
-          </div>
-          <div class="figure figure--year">
-            <span class="figure__val" id="totalYear">&mdash;</span>
-            <span class="figure__lab">per year</span>
-          </div>
-          <div class="figure figure--kwh">
-            <span class="figure__val" id="totalKwh">&mdash;</span>
-            <span class="figure__lab">kWh / month</span>
-          </div>
-        </div>
-        <div class="totals__actions">
-          <button type="button" class="btn btn--ghost" id="printBtn">Print summary</button>
-          <button type="button" class="btn btn--ghost" id="resetBtn">Reset</button>
+        <div class="step__nav">
+          <span aria-hidden="true"></span>
+          <button type="button" class="btn btn--primary btn--next" id="toStep2">Next &mdash; pick appliances <span aria-hidden="true">&rarr;</span></button>
         </div>
       </div>
     </section>
 
-    <!-- ============ BIGGEST WINS ============ -->
-    <section class="wins" id="wins" aria-labelledby="winsHeading" hidden>
-      <h2 class="wins__heading" id="winsHeading">Where your money goes</h2>
-      <div class="wins__grid" id="winsGrid"></div>
-    </section>
+    <!-- ============ STEP 2 — PICK APPLIANCES ============ -->
+    <section class="step" id="step2" aria-labelledby="s2h" tabindex="-1" hidden>
+      <div class="step__inner">
+        <p class="step__kicker">Step 2 of 3</p>
+        <h2 class="step__title" id="s2h">Which appliances do you have?</h2>
+        <p class="step__sub">Tick the ones you use and set how many of each. You can fine-tune watts and hours in the next step.</p>
 
-    <!-- ============ RANKED APPLIANCES ============ -->
-    <section class="ranking" aria-labelledby="rankHeading">
-      <div class="ranking__head">
-        <h2 class="ranking__heading" id="rankHeading">Your appliances, most expensive first</h2>
-        <p class="ranking__note">Edit watts, hours a day, and days a week. Everything recomputes as you type.</p>
-      </div>
+        <div class="picker" id="picker" role="group" aria-label="Choose your appliances"></div>
 
-      <ol class="applist" id="applist" aria-label="Appliances ranked by cost"></ol>
-
-      <p class="applist__empty" id="emptyState" hidden>
-        No appliances yet. Add some from the library below to see what they cost.
-      </p>
-    </section>
-
-    <!-- ============ LIBRARY (add appliances) ============ -->
-    <section class="library" aria-labelledby="libHeading">
-      <div class="library__head">
-        <h2 class="library__heading" id="libHeading">Add an appliance</h2>
-        <p class="library__note">Realistic defaults for effective power and typical use &mdash; tweak them to match yours.</p>
-      </div>
-      <div class="library__grid" id="library"></div>
-    </section>
-
-    <!-- ============ FORMULA / TRUST ============ -->
-    <section class="method" aria-labelledby="methodHeading">
-      <h2 class="method__heading" id="methodHeading">How the numbers are worked out</h2>
-      <div class="method__grid">
-        <div class="formula">
-          <p class="formula__line"><span class="formula__lhs">kWh / day</span> = watts &times; hours&#8202;per&#8202;day &divide; 1000</p>
-          <p class="formula__line"><span class="formula__lhs">kWh / month</span> = kWh&#8202;per&#8202;day &times; (days&#8202;per&#8202;week &divide; 7) &times; 30.44</p>
-          <p class="formula__line"><span class="formula__lhs">cost</span> = kWh &times; your&#8202;rate&#8202;per&#8202;kWh</p>
+        <div class="step__nav">
+          <button type="button" class="btn btn--ghost" id="backTo1"><span aria-hidden="true">&larr;</span> Back</button>
+          <span class="pick-count" id="pickCount" aria-live="polite">Nothing picked yet</span>
+          <button type="button" class="btn btn--primary btn--next" id="toStep3" disabled>Compute my cost <span aria-hidden="true">&rarr;</span></button>
         </div>
-        <p class="method__prose">
-          30.44 is the average number of days in a month, so a 7-day-a-week appliance is counted for a
-          full month. For always-on or cycling appliances like a fridge or router, the defaults use an
-          <em>effective</em> wattage &mdash; a fridge doesn't pull its full compressor rating around the
-          clock, so counting it at that would badly overstate the cost. Change any number to match your
-          own appliance, and the ranking and totals update instantly.
-        </p>
       </div>
+    </section>
+
+    <!-- ============ STEP 3 — WHAT IT COSTS ============ -->
+    <section class="step step--result" id="step3" aria-labelledby="s3h" tabindex="-1" hidden>
+      <!-- sticky totals -->
+      <section class="totals" aria-labelledby="totalsHeading">
+        <div class="totals__inner">
+          <h2 class="totals__heading" id="totalsHeading">Estimated bill from your appliances <span class="totals__rate" id="totalsRate"></span></h2>
+          <div class="totals__figures">
+            <div class="figure"><span class="figure__val" id="totalMonth">&mdash;</span><span class="figure__lab">per month</span></div>
+            <div class="figure figure--year"><span class="figure__val" id="totalYear">&mdash;</span><span class="figure__lab">per year</span></div>
+            <div class="figure figure--kwh"><span class="figure__val" id="totalKwh">&mdash;</span><span class="figure__lab">kWh / month</span></div>
+          </div>
+          <div class="totals__actions">
+            <button type="button" class="btn btn--primary" id="shareBtn">Share result</button>
+            <button type="button" class="btn btn--ghost" id="printBtn">Print</button>
+          </div>
+        </div>
+      </section>
+
+      <div class="result__body">
+        <div class="result__head">
+          <div>
+            <p class="step__kicker">Step 3 of 3</p>
+            <h2 class="step__title" id="s3h">What it&rsquo;s costing you</h2>
+          </div>
+          <div class="result__nav">
+            <button type="button" class="btn btn--ghost" id="editPick"><span aria-hidden="true">&larr;</span> Edit appliances</button>
+            <button type="button" class="btn btn--ghost" id="resetBtn">Start over</button>
+          </div>
+        </div>
+
+        <!-- biggest wins -->
+        <section class="wins" id="wins" aria-labelledby="winsHeading" hidden>
+          <h2 class="wins__heading" id="winsHeading">Where your money goes</h2>
+          <div class="wins__grid" id="winsGrid"></div>
+        </section>
+
+        <!-- ranked appliances -->
+        <section class="ranking" aria-labelledby="rankHeading">
+          <div class="ranking__head">
+            <h2 class="ranking__heading" id="rankHeading">Your appliances, most expensive first</h2>
+            <p class="ranking__note">Edit watts, hours a day, days a week, or how many you have. Everything recomputes as you type.</p>
+          </div>
+
+          <ol class="applist" id="applist" aria-label="Appliances ranked by cost"></ol>
+
+          <p class="applist__empty" id="emptyState" hidden>
+            No appliances yet. <button type="button" class="linkbtn" id="emptyPick">Pick some appliances</button> to see what they cost.
+          </p>
+        </section>
+
+        <!-- formula / trust -->
+        <section class="method" aria-labelledby="methodHeading">
+          <h2 class="method__heading" id="methodHeading">How the numbers are worked out</h2>
+          <div class="method__grid">
+            <div class="formula">
+              <p class="formula__line"><span class="formula__lhs">kWh / day</span> = watts &times; hours&#8202;per&#8202;day &divide; 1000</p>
+              <p class="formula__line"><span class="formula__lhs">kWh / month</span> = kWh&#8202;per&#8202;day &times; (days&#8202;per&#8202;week &divide; 7) &times; 30.44</p>
+              <p class="formula__line"><span class="formula__lhs">cost</span> = kWh &times; how&#8202;many &times; your&#8202;rate&#8202;per&#8202;kWh</p>
+            </div>
+            <p class="method__prose">
+              30.44 is the average number of days in a month, so a 7-day-a-week appliance is counted for a
+              full month. For always-on or cycling appliances like a fridge or router, the defaults use an
+              <em>effective</em> wattage &mdash; a fridge doesn't pull its full compressor rating around the
+              clock, so counting it at that would badly overstate the cost. Change any number to match your
+              own appliance, and the ranking and totals update instantly.
+            </p>
+          </div>
+        </section>
+      </div>
+
+      <div class="toast" id="toast" role="status" aria-live="polite"></div>
     </section>
   </main>
 
